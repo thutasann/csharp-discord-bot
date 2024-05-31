@@ -18,7 +18,6 @@ jobs:
 
             - name: Build and Test URL Shortener
               run: |
-                  cd server
                   dotnet restore
                   dotnet build
                   dotnet test
