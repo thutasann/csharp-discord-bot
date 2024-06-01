@@ -2,6 +2,8 @@ using csharp_discord_bot.Commands;
 using csharp_discord_bot.Config;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 
 namespace csharp_discord_bot.Helpers
 {
@@ -10,7 +12,7 @@ namespace csharp_discord_bot.Helpers
     /// </summary>
     public static class DiscordSetup
     {
-        private static DiscordClient? Client { get; set; }
+        public static DiscordClient? Client { get; set; }
         private static CommandsNextExtension? Commands { get; set; }
 
         /// <summary>
@@ -33,6 +35,12 @@ namespace csharp_discord_bot.Helpers
 
             Client = new DiscordClient(discordConfig);
 
+            // Set the default timeout for Commands that ues interactivity
+            Client.UseInteractivity(new InteractivityConfiguration()
+            {
+                Timeout = TimeSpan.FromMinutes(1)
+            });
+
             var commandsConfig = new CommandsNextConfiguration()
             {
                 StringPrefixes = [jsonReader.Prefix],
@@ -43,7 +51,9 @@ namespace csharp_discord_bot.Helpers
 
             Commands = Client.UseCommandsNext(commandsConfig);
 
+            // register commands
             Commands.RegisterCommands<TestCommands>();
+            Commands.RegisterCommands<CardGameEmbed>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running

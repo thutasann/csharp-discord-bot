@@ -2,6 +2,7 @@ using csharp_discord_bot.Helpers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity.Extensions;
 
 namespace csharp_discord_bot.Commands
 {
@@ -45,49 +46,35 @@ namespace csharp_discord_bot.Commands
             await ctx.Channel.SendMessageAsync(message);
         }
 
-        [Command("cardgame")]
-        public async Task CardGame(CommandContext ctx)
+        [Command("interactivity-test")]
+        public async Task InterActivityTest(CommandContext ctx)
         {
-            var userCard = new CardSystem();
-            var botCard = new CardSystem();
-
-            var userCardEmbed = new DiscordEmbedBuilder
+            Console.WriteLine("Interactivity Test...");
+            var interactivity = DiscordSetup.Client?.GetInteractivity();
+            if (interactivity is not null)
             {
-                Title = $"Your card is {userCard.SelectedCard}",
-                Color = DiscordColor.Lilac,
-            };
-
-            await ctx.Channel.SendMessageAsync(embed: userCardEmbed);
-
-            var botCardEmbed = new DiscordEmbedBuilder
-            {
-                Title = $"The bot Drew a {botCard.SelectedCard}",
-                Color = DiscordColor.Orange
-            };
-
-            await ctx.Channel.SendMessageAsync(embed: botCardEmbed);
-
-            if (userCard.SelectedNumber > botCard.SelectedNumber)
-            {
-                // User wins
-                var winMessage = new DiscordEmbedBuilder
+                var messageToRetriever = await interactivity.WaitForMessageAsync(message => message.Content == "Hello");
+                if (messageToRetriever.Result.Content == "Hello")
                 {
-                    Title = "Congrat!, You Win the game!!",
-                    Color = DiscordColor.Green
-                };
-
-                await ctx.Channel.SendMessageAsync(embed: winMessage);
+                    await ctx.Channel.SendMessageAsync($"{ctx.User.Username} said Hello.");
+                }
             }
-            else
-            {
-                // Bot wins
-                var loseMessage = new DiscordEmbedBuilder
-                {
-                    Title = "You Lose the game!!",
-                    Color = DiscordColor.Red
-                };
+        }
 
-                await ctx.Channel.SendMessageAsync(embed: loseMessage);
+        [Command("reaction")]
+        public async Task ReactionTest(CommandContext ctx)
+        {
+            Console.WriteLine("Reaction Testing...");
+            string jumpUrl = "https://discord.com/channels/1220625821643837541/1220625821643837544/1246442292152369182";
+
+            var interactivity = DiscordSetup.Client?.GetInteractivity();
+            if (interactivity is not null)
+            {
+                var messageToReact = await interactivity.WaitForReactionAsync(message => message.Message.JumpLink == new Uri(jumpUrl));
+                if (messageToReact.Result.Message.JumpLink == new Uri(jumpUrl))
+                {
+                    await ctx.Channel.SendMessageAsync($"{ctx.User.Username} used the emoji with the name {messageToReact.Result.Emoji.Name}");
+                }
             }
         }
     }

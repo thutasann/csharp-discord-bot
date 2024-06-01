@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="DSharpPlus" Version="5.0.0-nightly-02267" />
     <PackageReference Include="DSharpPlus.CommandsNext" Version="5.0.0-nightly-02267" />
+    <PackageReference Include="DSharpPlus.Interactivity" Version="5.0.0-nightly-02267" />
   </ItemGroup>
 
 </Project>
