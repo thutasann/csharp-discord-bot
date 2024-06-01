@@ -1,4 +1,6 @@
-# MAKING A DISCORD BOT IN C#
+# MAKING A DISCORD BOT IN C# 🤖
+
+Making the Discord Bot in C# with [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus).
 
 <p align="center">
   <img src="./examples/logo.png" width="100px" height="100px" />
@@ -8,6 +10,7 @@
 
 - Commands
 - Embed Messages
+- Mini CardGame Embed Message
 
 ## Setups
 
@@ -21,7 +24,7 @@
 }
 ```
 
-- send messages/commands with defiend prefix (example `!embed`)
+- send messages/commands with defined prefix (example `!embed`, `!cardgame`)
 - can see the commands in `TestCommands.cs`
 
 ## Scripts
