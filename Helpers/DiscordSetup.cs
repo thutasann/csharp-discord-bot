@@ -1,3 +1,4 @@
+using csharp_discord_bot.Commands;
 using csharp_discord_bot.config;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -34,6 +35,8 @@ namespace csharp_discord_bot.Helpers
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
+
+            Commands.RegisterCommands<TestCommands>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running
