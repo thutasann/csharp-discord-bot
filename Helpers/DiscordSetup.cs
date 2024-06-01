@@ -1,15 +1,22 @@
 using csharp_discord_bot.Commands;
-using csharp_discord_bot.config;
+using csharp_discord_bot.Config;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 
 namespace csharp_discord_bot.Helpers
 {
+    /// <summary>
+    /// Discord Bot Setup
+    /// </summary>
     public static class DiscordSetup
     {
         private static DiscordClient? Client { get; set; }
         private static CommandsNextExtension? Commands { get; set; }
 
+        /// <summary>
+        /// Main Method for Discord Bot!
+        /// </summary>
+        /// <returns></returns>
 
         public static async Task MainAsync()
         {

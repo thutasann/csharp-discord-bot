@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace csharp_discord_bot.config
+namespace csharp_discord_bot.Config
 {
     public class JSONReader
     {
