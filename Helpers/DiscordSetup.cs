@@ -1,4 +1,5 @@
 using csharp_discord_bot.Commands;
+using csharp_discord_bot.Commands.Components;
 using csharp_discord_bot.Commands.Slash;
 using csharp_discord_bot.Config;
 using DSharpPlus;
@@ -51,6 +52,8 @@ namespace csharp_discord_bot.Helpers
             // Discord Client Evnets
             // Client.MessageCreated += MessageCreatedHandler;
             Client.VoiceStateUpdated += VoiceChannelHandler;
+            Client.GuildMemberAdded += GuildMemberHandler;
+            Client.ComponentInteractionCreated += ComponentInteractionCreated;
 
             // Comamnds Config
             var commandsConfig = new CommandsNextConfiguration()
@@ -75,9 +78,61 @@ namespace csharp_discord_bot.Helpers
             Commands.RegisterCommands<TestCommands>();
             Commands.RegisterCommands<CardGameEmbed>();
             Commands.RegisterCommands<PollCommand>();
+            Commands.RegisterCommands<InteractionComponents>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running
+        }
+
+        private static async Task GuildMemberHandler(DiscordClient sender, GuildMemberAddEventArgs args)
+        {
+            var defaultChannel = args.Guild.GetDefaultChannel();
+
+            var welcomeEmbed = new DiscordEmbedBuilder()
+            {
+                Color = DiscordColor.Gold,
+                Title = $"Welcome {args.Member.Username} to the server",
+                Description = "Hope you enjoy your stay, please read the rules"
+            };
+            await defaultChannel.SendMessageAsync(embed: welcomeEmbed);
+        }
+
+        private static async Task ComponentInteractionCreated(DiscordClient sender, ComponentInteractionCreateEventArgs args)
+        {
+            switch (args.Interaction.Data.CustomId)
+            {
+                case "button1":
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has pressed button 1"));
+                    break;
+                case "button2":
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has pressed button 2"));
+                    break;
+                case "basicsButton":
+                    await args.Interaction.DeferAsync();
+                    var basicCommandsEmbed = new DiscordEmbedBuilder
+                    {
+                        Color = DiscordColor.Black,
+                        Title = "Basic Commands",
+                        Description = "!test => Send a basic message \n" +
+                            "!embed => Send a basic embed message \n" +
+                            "!calculator => Perform an operation on 2 numbers  \n" +
+                            "!cardgame => Play a simple card game"
+                    };
+                    await args.Interaction.EditOriginalResponseAsync(new DiscordWebhookBuilder().AddEmbed(basicCommandsEmbed));
+                    break;
+                case "calculatorButton":
+                    await args.Interaction.DeferAsync();
+                    var calculatorCommandsEmbed = new DiscordEmbedBuilder
+                    {
+                        Color = DiscordColor.Black,
+                        Title = "Basic Commands",
+                        Description = "/calculator add -> Perform 2 numbers operations"
+                    };
+                    await args.Interaction.EditOriginalResponseAsync(new DiscordWebhookBuilder().AddEmbed(calculatorCommandsEmbed));
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static async Task CommanderErroredHandler(CommandsNextExtension sender, CommandErrorEventArgs e)
