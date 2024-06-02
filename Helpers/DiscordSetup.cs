@@ -1,4 +1,5 @@
 using csharp_discord_bot.Commands;
+using csharp_discord_bot.Commands.Slash;
 using csharp_discord_bot.Config;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -8,6 +9,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
 
 namespace csharp_discord_bot.Helpers
 {
@@ -35,7 +37,7 @@ namespace csharp_discord_bot.Helpers
                 Intents = DiscordIntents.All,
                 Token = jsonReader.Token,
                 TokenType = TokenType.Bot,
-                AutoReconnect = true
+                AutoReconnect = true,
             };
 
             Client = new DiscordClient(discordConfig);
@@ -60,6 +62,10 @@ namespace csharp_discord_bot.Helpers
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
+            var slashCommandsConfiguration = Client.UseSlashCommands();
+
+            // register slash commands
+            slashCommandsConfiguration.RegisterCommands<BasicSL>();
 
             // Commands Events
             Commands.CommandErrored += CommanderErroredHandler;
@@ -95,11 +101,6 @@ namespace csharp_discord_bot.Helpers
 
                 await e.Context.Channel.SendMessageAsync(embed: coolDownMessage);
             }
-        }
-
-        private static async Task MessageCreatedHandler(DiscordClient sender, MessageCreateEventArgs e)
-        {
-            await e.Channel.SendMessageAsync("This event handler was triggered");
         }
 
         private static async Task VoiceChannelHandler(DiscordClient sender, VoiceStateUpdateEventArgs e)
