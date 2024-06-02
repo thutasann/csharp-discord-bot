@@ -85,5 +85,30 @@ namespace csharp_discord_bot.Commands
             await ctx.Channel.SendMessageAsync("Cooldown Message");
         }
 
+        [Command("calculator")]
+        public async Task CalculatorExample(CommandContext ctx, int num1, string operation, int numb2)
+        {
+            int result = 0;
+
+            switch (operation)
+            {
+                case "+":
+                    result = num1 + numb2;
+                    break;
+                case "-":
+                    result = num1 - numb2;
+                    break;
+                case "*":
+                    result = num1 * numb2;
+                    break;
+                case "/":
+                    result = num1 / numb2;
+                    break;
+                default:
+                    await ctx.Channel.SendMessageAsync("Please enter a valid operation");
+                    break;
+            }
+            await ctx.Channel.SendMessageAsync(result.ToString());
+        }
     }
 }

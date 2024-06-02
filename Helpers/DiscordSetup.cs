@@ -66,6 +66,7 @@ namespace csharp_discord_bot.Helpers
 
             // register slash commands
             slashCommandsConfiguration.RegisterCommands<BasicSL>();
+            slashCommandsConfiguration.RegisterCommands<CalculatorSL>();
 
             // Commands Events
             Commands.CommandErrored += CommanderErroredHandler;
