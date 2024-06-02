@@ -77,5 +77,13 @@ namespace csharp_discord_bot.Commands
                 }
             }
         }
+
+        [Command("cooldown")]
+        [Cooldown(5, 10, CooldownBucketType.User)]
+        public async Task CooldownTest(CommandContext ctx)
+        {
+            await ctx.Channel.SendMessageAsync("Cooldown Message");
+        }
+
     }
 }
