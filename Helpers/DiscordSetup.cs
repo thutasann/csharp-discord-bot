@@ -54,6 +54,7 @@ namespace csharp_discord_bot.Helpers
             // register commands
             Commands.RegisterCommands<TestCommands>();
             Commands.RegisterCommands<CardGameEmbed>();
+            Commands.RegisterCommands<PollCommand>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running
