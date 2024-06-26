@@ -106,9 +106,9 @@ namespace csharp_discord_bot.Helpers
         /// <returns></returns>
         private static async Task ComponentInteractionCreated(DiscordClient sender, ComponentInteractionCreateEventArgs args)
         {
+            // --------- Dropdown List
             if (args.Id == "dropDownList" && args.Interaction.Data.ComponentType == ComponentType.StringSelect)
             {
-                Console.WriteLine("Dropdown....");
                 var options = args.Values;
                 foreach (var option in options)
                 {
@@ -124,6 +124,15 @@ namespace csharp_discord_bot.Helpers
                             await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has Selected Option 3"));
                             break;
                     }
+                }
+            }
+            else if (args.Id == "channelDropdownList")
+            {
+                var options = args.Values;
+                foreach (var channel in options)
+                {
+                    var selectedChannel = await Client!.GetChannelAsync(ulong.Parse(channel));
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has Selected the channel with name {selectedChannel.Name}"));
                 }
             }
 

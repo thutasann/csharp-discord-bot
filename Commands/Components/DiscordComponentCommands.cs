@@ -30,5 +30,19 @@ namespace csharp_discord_bot.Commands.Components
 
             await ctx.Channel.SendMessageAsync(dropdownMessage);
         }
+
+        [Command("channel-list")]
+        public async Task ChannelList(CommandContext ctx)
+        {
+            var channelComponent = new DiscordChannelSelectComponent("channelDropdownList", "Select Channel...");
+
+            var dropDownMessage = new DiscordMessageBuilder()
+            .AddEmbed(new DiscordEmbedBuilder()
+            .WithColor(DiscordColor.Gold)
+            .WithTitle("This embed has a channel dropdown list on it"))
+            .AddComponents(channelComponent);
+
+            await ctx.Channel.SendMessageAsync(dropDownMessage);
+        }
     }
 }
