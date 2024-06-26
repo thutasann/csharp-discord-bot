@@ -79,6 +79,7 @@ namespace csharp_discord_bot.Helpers
             Commands.RegisterCommands<CardGameEmbed>();
             Commands.RegisterCommands<PollCommand>();
             Commands.RegisterCommands<InteractionComponents>();
+            Commands.RegisterCommands<DiscordComponentCommands>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running
@@ -97,8 +98,36 @@ namespace csharp_discord_bot.Helpers
             await defaultChannel.SendMessageAsync(embed: welcomeEmbed);
         }
 
+        /// <summary>
+        /// Component Interactons Created Event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         private static async Task ComponentInteractionCreated(DiscordClient sender, ComponentInteractionCreateEventArgs args)
         {
+            if (args.Id == "dropDownList" && args.Interaction.Data.ComponentType == ComponentType.StringSelect)
+            {
+                Console.WriteLine("Dropdown....");
+                var options = args.Values;
+                foreach (var option in options)
+                {
+                    switch (option)
+                    {
+                        case "option1":
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has Selected Option 1"));
+                            break;
+                        case "option2":
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has Selected Option 2"));
+                            break;
+                        case "option3":
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has Selected Option 3"));
+                            break;
+                    }
+                }
+            }
+
+            // --------- Button Events
             switch (args.Interaction.Data.CustomId)
             {
                 case "button1":
