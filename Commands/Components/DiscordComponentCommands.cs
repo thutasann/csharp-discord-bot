@@ -44,5 +44,20 @@ namespace csharp_discord_bot.Commands.Components
 
             await ctx.Channel.SendMessageAsync(dropDownMessage);
         }
+
+
+        [Command("mention-list")]
+        public async Task MentionList(CommandContext ctx)
+        {
+            var mentionComponent = new DiscordMentionableSelectComponent("mentionDropdownList", "Select Mention...");
+
+            var dropDownMessage = new DiscordMessageBuilder()
+                .AddEmbed(new DiscordEmbedBuilder()
+                .WithColor(DiscordColor.Gold)
+                .WithTitle("This embed has a channel dropdown list on it"))
+                .AddComponents(mentionComponent);
+
+            await ctx.Channel.SendMessageAsync(dropDownMessage);
+        }
     }
 }

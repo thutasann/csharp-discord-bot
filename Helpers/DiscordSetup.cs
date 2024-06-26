@@ -85,6 +85,9 @@ namespace csharp_discord_bot.Helpers
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running
         }
 
+        /// <summary>
+        /// Guidd Member Handler
+        /// </summary>
         private static async Task GuildMemberHandler(DiscordClient sender, GuildMemberAddEventArgs args)
         {
             var defaultChannel = args.Guild.GetDefaultChannel();
@@ -101,9 +104,6 @@ namespace csharp_discord_bot.Helpers
         /// <summary>
         /// Component Interactons Created Event
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
         private static async Task ComponentInteractionCreated(DiscordClient sender, ComponentInteractionCreateEventArgs args)
         {
             // --------- Dropdown List
@@ -133,6 +133,15 @@ namespace csharp_discord_bot.Helpers
                 {
                     var selectedChannel = await Client!.GetChannelAsync(ulong.Parse(channel));
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has Selected the channel with name {selectedChannel.Name}"));
+                }
+            }
+            else if (args.Id == "mentionDropdownList")
+            {
+                var options = args.Values;
+                foreach (var channel in options)
+                {
+                    var selectedUser = await Client!.GetUserAsync(ulong.Parse(channel));
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent($"{args.User.Username} has mentioned the user with name {selectedUser.Mention}"));
                 }
             }
 
@@ -173,6 +182,9 @@ namespace csharp_discord_bot.Helpers
             }
         }
 
+        /// <summary>
+        /// Commander Error Handler
+        /// </summary>
         private static async Task CommanderErroredHandler(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
             if (e.Exception is ChecksFailedException exception)
@@ -197,6 +209,9 @@ namespace csharp_discord_bot.Helpers
             }
         }
 
+        /// <summary>
+        /// Voice Channel Handler
+        /// </summary>
         private static async Task VoiceChannelHandler(DiscordClient sender, VoiceStateUpdateEventArgs e)
         {
             Console.WriteLine("Voice Channel handler...");
