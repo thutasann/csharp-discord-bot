@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 

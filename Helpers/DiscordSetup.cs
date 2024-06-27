@@ -25,7 +25,6 @@ namespace csharp_discord_bot.Helpers
         /// <summary>
         /// Main Method for Discord Bot!
         /// </summary>
-        /// <returns></returns>
 
         public static async Task MainAsync()
         {
@@ -41,6 +40,7 @@ namespace csharp_discord_bot.Helpers
                 AutoReconnect = true,
             };
 
+            // Discord Client
             Client = new DiscordClient(discordConfig);
 
             // Set the default timeout for Commands that ues interactivity
@@ -49,11 +49,11 @@ namespace csharp_discord_bot.Helpers
                 Timeout = TimeSpan.FromMinutes(1)
             });
 
-            // Discord Client Evnets
-            // Client.MessageCreated += MessageCreatedHandler;
+            // Discord Client Events
             Client.VoiceStateUpdated += VoiceChannelHandler;
             Client.GuildMemberAdded += GuildMemberHandler;
             Client.ComponentInteractionCreated += ComponentInteractionCreated;
+            Client.ModalSubmitted += ModalSubmittedHandler;
 
             // Comamnds Config
             var commandsConfig = new CommandsNextConfiguration()
@@ -70,6 +70,7 @@ namespace csharp_discord_bot.Helpers
             // register slash commands
             slashCommandsConfiguration.RegisterCommands<BasicSL>();
             slashCommandsConfiguration.RegisterCommands<CalculatorSL>();
+            slashCommandsConfiguration.RegisterCommands<ModalSL>();
 
             // Commands Events
             Commands.CommandErrored += CommanderErroredHandler;
@@ -83,6 +84,18 @@ namespace csharp_discord_bot.Helpers
 
             await Client.ConnectAsync();
             await Task.Delay(-1); // to keep bot running forever, as long as the program is running
+        }
+
+        /// <summary>
+        /// Modal Submit Handler
+        /// </summary>
+        private static async Task ModalSubmittedHandler(DiscordClient sender, ModalSubmitEventArgs e)
+        {
+            if (e.Interaction.Type == InteractionType.ModalSubmit)
+            {
+                var values = e.Values;
+                await e.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent($"{e.Interaction.User.Username} submitted the modal with input value -> {values.Values.First()}"));
+            }
         }
 
         /// <summary>

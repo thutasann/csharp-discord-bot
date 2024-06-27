@@ -15,7 +15,7 @@ Making the Discord Bot in C# with [DSharpPlus](https://github.com/DSharpPlus/DSh
 - Commands Attributes and Events Handler
 - Slash Commands
 - Group Slash Commands
-- Interaction Components (Buttons, Modals)
+- Interaction Components (Buttons, Dropdown, Inputs, Modals)
 
 ## Setups
 
